@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- prevent extraneous favicon requests -->
+  <!-- <link rel="icon" href="data:,"> -->
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="webrtc.js"></script>
+</head>
+
+<body>
+
+  <div id="videos" class="videos">
+
+    <div id="localVideoContainer" class="videoContainer">
+      <video id="localVideo" autoplay muted></video>
+    </div>
+
+    <!-- Remote videos get appended here -->
+    
+  </div>
+
+  <div>
+    <textarea id="chatLog" class="chat_log" readonly></textarea>
+  </div>
+  <form id="chat">
+    <input id="name" class="name" type="text" readonly>
+    <input id="message" class="message" type="text">
+    <input type="submit" class="chat" value="chat"/>
+  </form>
+  
+  <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+  <script type="text/javascript">
+    start();
+  </script>
+
+ <script>
+    var chatConnection = new WebSocket('wss://' + window.location.hostname + ':' + WS_PORT);
+    $('#chat').on('submit',function(e){
+      chatConnection.send(JSON.stringify({'type':'message','user':$('#name').val(),'msg':$('#message').val()}));
+      $('#message').val('');
+      $('#message').focus();
+      e.preventDefault();
+    })
+
+
+ </script>
+
+</body>
+
+</html>
